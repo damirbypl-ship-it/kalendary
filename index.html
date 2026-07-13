@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Таймер обратного отсчёта до важного события">
+  <title>Таймер до важного события</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="page-bg" aria-hidden="true"></div>
+
+  <!-- Мелкие декоративные детали на фоне -->
+  <div class="decorations" aria-hidden="true">
+    <!-- День рождения -->
+    <span class="deco deco--birthday deco-pos-1">🎁</span>
+    <span class="deco deco--birthday deco-pos-2">🎈</span>
+    <span class="deco deco--birthday deco-pos-3">🎂</span>
+    <span class="deco deco--birthday deco-pos-4">🎀</span>
+    <span class="deco deco--birthday deco-pos-5">🧁</span>
+    <span class="deco deco--birthday deco-pos-6">🎉</span>
+
+    <!-- Каникулы -->
+    <span class="deco deco--vacation deco-pos-7">☀️</span>
+    <span class="deco deco--vacation deco-pos-8">🌴</span>
+    <span class="deco deco--vacation deco-pos-9">🏖️</span>
+    <span class="deco deco--vacation deco-pos-10">🌊</span>
+    <span class="deco deco--vacation deco-pos-11">⛱️</span>
+    <span class="deco deco--vacation deco-pos-12">🐚</span>
+
+    <!-- Новый год -->
+    <span class="deco deco--newyear deco-pos-13">🎄</span>
+    <span class="deco deco--newyear deco-pos-14">🎅</span>
+    <span class="deco deco--newyear deco-pos-15">❄️</span>
+    <span class="deco deco--newyear deco-pos-16">🎁</span>
+    <span class="deco deco--newyear deco-pos-17">⭐</span>
+    <span class="deco deco--newyear deco-pos-18">🔔</span>
+
+    <!-- Своё событие -->
+    <span class="deco deco--custom deco-pos-19">✨</span>
+    <span class="deco deco--custom deco-pos-20">🌟</span>
+    <span class="deco deco--custom deco-pos-21">💫</span>
+    <span class="deco deco--custom deco-pos-22">🎯</span>
+
+    <!-- Общие детали (всегда на фоне) -->
+    <span class="deco deco--common deco-pos-23">✨</span>
+    <span class="deco deco--common deco-pos-24">💫</span>
+    <span class="deco deco--common deco-pos-25">⭐</span>
+  </div>
+
+  <!-- Снежинки для темы «Новый год» -->
+  <div class="snowflakes" aria-hidden="true">
+    <span class="snowflake">❄</span>
+    <span class="snowflake">❅</span>
+    <span class="snowflake">❆</span>
+    <span class="snowflake">❄</span>
+    <span class="snowflake">❅</span>
+    <span class="snowflake">❆</span>
+    <span class="snowflake">❄</span>
+    <span class="snowflake">❅</span>
+  </div>
+
+  <header class="header">
+    <div class="container header__inner">
+      <div class="logo">
+        <span class="logo__icon" aria-hidden="true">⏳</span>
+        <h1 class="logo__title">Таймер до события</h1>
+      </div>
+      <p class="header__subtitle">Отсчитываем дни до самого важного момента</p>
+    </div>
+  </header>
+
+  <main class="main container">
+    <!-- Блок выбора события -->
+    <section class="card card--selector" aria-labelledby="selector-title">
+      <span class="card-deco card-deco--tl" aria-hidden="true"></span>
+      <span class="card-deco card-deco--br" aria-hidden="true"></span>
+      <h2 id="selector-title" class="card__title">Выберите событие</h2>
+
+      <div class="event-buttons" role="group" aria-label="Готовые события">
+        <button type="button" class="event-btn" data-event="birthday">
+          <span class="event-btn__icon">🎂</span>
+          <span class="event-btn__label">День рождения</span>
+        </button>
+        <button type="button" class="event-btn" data-event="vacation">
+          <span class="event-btn__icon">🏖️</span>
+          <span class="event-btn__label">Каникулы</span>
+        </button>
+        <button type="button" class="event-btn" data-event="newyear">
+          <span class="event-btn__icon">🎄</span>
+          <span class="event-btn__label">Новый год</span>
+        </button>
+        <button type="button" class="event-btn event-btn--custom" data-event="custom">
+          <span class="event-btn__icon">✨</span>
+          <span class="event-btn__label">Своё событие</span>
+        </button>
+      </div>
+
+      <!-- Дополнительные поля (дата рождения, своё событие) -->
+      <form class="event-form" id="event-form" novalidate>
+        <div class="form-row form-row--hidden" id="birthday-fields">
+          <label class="form-label" for="birthday-date">Дата вашего дня рождения</label>
+          <input type="date" id="birthday-date" class="form-input" name="birthday-date">
+        </div>
+
+        <div class="form-row form-row--hidden" id="custom-fields">
+          <label class="form-label" for="custom-name">Название события</label>
+          <input type="text" id="custom-name" class="form-input" name="custom-name"
+                 placeholder="Например: Выпускной" maxlength="60">
+
+          <label class="form-label" for="custom-date">Дата события</label>
+          <input type="date" id="custom-date" class="form-input" name="custom-date">
+        </div>
+
+        <button type="submit" class="btn btn--primary" id="save-event-btn">
+          Сохранить событие
+        </button>
+      </form>
+    </section>
+
+    <!-- Блок таймера -->
+    <section class="card card--timer" aria-labelledby="event-name">
+      <span class="card-deco card-deco--tl" aria-hidden="true"></span>
+      <span class="card-deco card-deco--br" aria-hidden="true"></span>
+      <div class="event-info" id="event-info">
+        <h2 id="event-name" class="event-info__name">Выберите событие</h2>
+        <p class="event-info__date" id="event-date">Дата появится после выбора</p>
+      </div>
+
+      <!-- Сообщение, если событие уже прошло -->
+      <div class="event-passed event-passed--hidden" id="event-passed" role="status">
+        <span class="event-passed__icon" aria-hidden="true">🎉</span>
+        <p class="event-passed__text">Событие уже наступило!</p>
+      </div>
+
+      <!-- Счётчик обратного отсчёта -->
+      <div class="countdown" id="countdown" aria-live="polite">
+        <div class="countdown__item">
+          <span class="countdown__value" id="days">00</span>
+          <span class="countdown__label">дней</span>
+        </div>
+        <div class="countdown__separator">:</div>
+        <div class="countdown__item">
+          <span class="countdown__value" id="hours">00</span>
+          <span class="countdown__label">часов</span>
+        </div>
+        <div class="countdown__separator">:</div>
+        <div class="countdown__item">
+          <span class="countdown__value" id="minutes">00</span>
+          <span class="countdown__label">минут</span>
+        </div>
+        <div class="countdown__separator">:</div>
+        <div class="countdown__item">
+          <span class="countdown__value" id="seconds">00</span>
+          <span class="countdown__label">секунд</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Дополнительные блоки: факт, картинка, цитата -->
+    <div class="extras">
+      <section class="card card--extra" aria-labelledby="fact-title">
+        <span class="card-deco card-deco--tr" aria-hidden="true">💡</span>
+        <h2 id="fact-title" class="card__title card__title--small">
+          <span aria-hidden="true">💡</span> Факт дня
+        </h2>
+        <p class="extra-text" id="fact-of-day">Загрузка факта...</p>
+      </section>
+
+      <section class="card card--extra card--image" aria-labelledby="image-title">
+        <span class="card-deco card-deco--tl" aria-hidden="true">🖼️</span>
+        <h2 id="image-title" class="card__title card__title--small">
+          <span aria-hidden="true">🖼️</span> Картинка дня
+        </h2>
+        <div class="day-image" id="day-image">
+          <div class="day-image__art" id="day-image-art" aria-hidden="true"></div>
+          <p class="day-image__caption" id="day-image-caption"></p>
+        </div>
+      </section>
+
+      <section class="card card--extra" aria-labelledby="quote-title">
+        <span class="card-deco card-deco--br" aria-hidden="true">💬</span>
+        <h2 id="quote-title" class="card__title card__title--small">
+          <span aria-hidden="true">💬</span> Фраза дня
+        </h2>
+        <blockquote class="quote" id="quote-of-day">
+          <p class="quote__text">Загрузка цитаты...</p>
+        </blockquote>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Школьный проект &middot; Таймер до важного события &middot; 2026</p>
+    </div>
+  </footer>
+
+  <!-- Модальное окно подтверждения -->
+  <dialog class="modal" id="confirm-modal" aria-labelledby="modal-title">
+    <div class="modal__content">
+      <h3 id="modal-title" class="modal__title">Подтвердите выбор</h3>
+      <p class="modal__text" id="modal-text">Вы уверены, что хотите сменить событие?</p>
+      <div class="modal__actions">
+        <button type="button" class="btn btn--ghost" id="modal-cancel">Отмена</button>
+        <button type="button" class="btn btn--primary" id="modal-confirm">Да, сменить</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Скрипты подключаются в конце — порядок важен -->
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
