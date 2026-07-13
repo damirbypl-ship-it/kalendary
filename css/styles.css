@@ -1,0 +1,981 @@
+/* ============================================
+   Базовые настройки и переменные
+   ============================================ */
+:root {
+  --color-bg-1: #667eea;
+  --color-bg-2: #764ba2;
+  --color-bg-3: #f093fb;
+  --color-surface: rgba(255, 255, 255, 0.92);
+  --color-surface-solid: #ffffff;
+  --color-text: #1e1b4b;
+  --color-text-muted: #5b5675;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+  --color-accent: #f59e0b;
+  --color-success: #10b981;
+  --shadow-sm: 0 2px 8px rgba(30, 27, 75, 0.08);
+  --shadow-md: 0 8px 24px rgba(30, 27, 75, 0.12);
+  --shadow-lg: 0 16px 48px rgba(30, 27, 75, 0.16);
+  --radius-sm: 12px;
+  --radius-md: 20px;
+  --radius-lg: 28px;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --font-main: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--color-text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Контент поверх декораций */
+.header,
+.main,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Анимированный фон страницы */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(135deg, var(--color-bg-1) 0%, var(--color-bg-2) 50%, var(--color-bg-3) 100%);
+  background-size: 200% 200%;
+  animation: gradientShift 12s ease infinite;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ============================================
+   Декоративные детали на фоне
+   ============================================ */
+.decorations {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.deco {
+  position: absolute;
+  line-height: 1;
+  user-select: none;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* Без выбранной темы — все детали слегка видны */
+.deco--birthday,
+.deco--vacation,
+.deco--newyear,
+.deco--custom {
+  opacity: 0.2;
+}
+
+.deco--common {
+  opacity: 0.3;
+  font-size: 1.1rem;
+}
+
+/* При выборе темы — свои детали ярче, остальные тусклее */
+body[data-theme="birthday"] .deco--birthday { opacity: 0.9; }
+body[data-theme="birthday"] .deco--vacation,
+body[data-theme="birthday"] .deco--newyear,
+body[data-theme="birthday"] .deco--custom { opacity: 0.08; }
+
+body[data-theme="vacation"] .deco--vacation { opacity: 0.9; }
+body[data-theme="vacation"] .deco--birthday,
+body[data-theme="vacation"] .deco--newyear,
+body[data-theme="vacation"] .deco--custom { opacity: 0.08; }
+
+body[data-theme="newyear"] .deco--newyear { opacity: 0.9; }
+body[data-theme="newyear"] .deco--birthday,
+body[data-theme="newyear"] .deco--vacation,
+body[data-theme="newyear"] .deco--custom { opacity: 0.08; }
+
+body[data-theme="custom"] .deco--custom { opacity: 0.9; }
+body[data-theme="custom"] .deco--birthday,
+body[data-theme="custom"] .deco--vacation,
+body[data-theme="custom"] .deco--newyear { opacity: 0.08; }
+
+/* Размеры и позиции декораций */
+.deco--birthday { font-size: 1.6rem; }
+.deco--vacation { font-size: 1.8rem; }
+.deco--newyear { font-size: 1.7rem; }
+.deco--custom  { font-size: 1.4rem; }
+
+.deco-pos-1  { top: 8%;  left: 4%;   animation: floatSlow 7s ease-in-out infinite; }
+.deco-pos-2  { top: 15%; right: 6%;  animation: sway 5s ease-in-out infinite; }
+.deco-pos-3  { top: 42%; left: 2%;   animation: floatMedium 6s ease-in-out infinite 0.5s; }
+.deco-pos-4  { top: 55%; right: 3%;  animation: sway 8s ease-in-out infinite 1s; }
+.deco-pos-5  { top: 72%; left: 8%;   animation: floatSlow 9s ease-in-out infinite 1.5s; }
+.deco-pos-6  { top: 88%; right: 10%; animation: bounceSoft 4s ease-in-out infinite; }
+
+.deco-pos-7  { top: 6%;  right: 12%; animation: spinGlow 12s linear infinite; font-size: 2.2rem; }
+.deco-pos-8  { top: 28%; left: 5%;   animation: sway 7s ease-in-out infinite; }
+.deco-pos-9  { top: 48%; right: 5%;  animation: floatMedium 8s ease-in-out infinite; }
+.deco-pos-10 { top: 65%; left: 3%;   animation: floatSlow 6s ease-in-out infinite 0.8s; }
+.deco-pos-11 { top: 78%; right: 7%;  animation: sway 6s ease-in-out infinite 1.2s; }
+.deco-pos-12 { top: 92%; left: 15%;  animation: floatMedium 7s ease-in-out infinite; }
+
+.deco-pos-13 { top: 10%; left: 10%;  animation: sway 6s ease-in-out infinite; }
+.deco-pos-14 { top: 20%; right: 4%;  animation: floatSlow 8s ease-in-out infinite; font-size: 2rem; }
+.deco-pos-15 { top: 38%; left: 6%;   animation: twinkle 3s ease-in-out infinite; }
+.deco-pos-16 { top: 50%; right: 8%;  animation: bounceSoft 5s ease-in-out infinite; }
+.deco-pos-17 { top: 68%; left: 4%;   animation: twinkle 4s ease-in-out infinite 1s; }
+.deco-pos-18 { top: 82%; right: 5%;  animation: sway 7s ease-in-out infinite 0.5s; }
+
+.deco-pos-19 { top: 12%; left: 7%;   animation: twinkle 3.5s ease-in-out infinite; }
+.deco-pos-20 { top: 35%; right: 9%;  animation: floatMedium 7s ease-in-out infinite; }
+.deco-pos-21 { top: 60%; left: 6%;   animation: sway 8s ease-in-out infinite 1s; }
+.deco-pos-22 { top: 85%; right: 12%; animation: floatSlow 6s ease-in-out infinite; }
+
+.deco-pos-23 { top: 25%; left: 50%;  animation: twinkle 5s ease-in-out infinite; }
+.deco-pos-24 { top: 45%; right: 15%; animation: twinkle 4s ease-in-out infinite 2s; }
+.deco-pos-25 { top: 75%; left: 45%;  animation: twinkle 6s ease-in-out infinite 1s; }
+
+/* Снежинки — только для Нового года */
+.snowflakes {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+body[data-theme="newyear"] .snowflakes {
+  opacity: 1;
+}
+
+.snowflake {
+  position: absolute;
+  top: -5%;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.6);
+  animation: snowfall linear infinite;
+}
+
+.snowflake:nth-child(1)  { left: 5%;  font-size: 0.9rem;  animation-duration: 12s; animation-delay: 0s; }
+.snowflake:nth-child(2)  { left: 15%; font-size: 1.2rem;  animation-duration: 15s; animation-delay: 2s; }
+.snowflake:nth-child(3)  { left: 25%; font-size: 0.8rem;  animation-duration: 10s; animation-delay: 4s; }
+.snowflake:nth-child(4)  { left: 40%; font-size: 1.1rem;  animation-duration: 14s; animation-delay: 1s; }
+.snowflake:nth-child(5)  { left: 55%; font-size: 0.95rem; animation-duration: 11s; animation-delay: 3s; }
+.snowflake:nth-child(6)  { left: 65%; font-size: 1.3rem;  animation-duration: 16s; animation-delay: 0.5s; }
+.snowflake:nth-child(7)  { left: 78%; font-size: 0.85rem; animation-duration: 13s; animation-delay: 5s; }
+.snowflake:nth-child(8)  { left: 90%; font-size: 1rem;   animation-duration: 12s; animation-delay: 2.5s; }
+
+/* Декорации на углах карточек */
+.card-deco {
+  position: absolute;
+  font-size: 1.3rem;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  animation: bounceSoft 4s ease-in-out infinite;
+}
+
+.card-deco--tl { top: -0.5rem; left: -0.3rem; }
+.card-deco--tr { top: -0.4rem; right: 0.6rem; }
+.card-deco--br { bottom: -0.4rem; right: 0.6rem; animation-delay: 1s; }
+
+/* Тематические уголки на главных карточках */
+.card--selector .card-deco--tl,
+.card--timer .card-deco--tl,
+.card--selector .card-deco--br,
+.card--timer .card-deco--br {
+  font-size: 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body:not([data-theme]) .card--selector .card-deco--tl::before,
+body:not([data-theme]) .card--timer .card-deco--tl::before { content: "✨"; }
+body:not([data-theme]) .card--selector .card-deco--br::before,
+body:not([data-theme]) .card--timer .card-deco--br::before { content: "⭐"; }
+
+body[data-theme="birthday"] .card--selector .card-deco--tl::before,
+body[data-theme="birthday"] .card--timer .card-deco--tl::before { content: "🎁"; }
+body[data-theme="birthday"] .card--selector .card-deco--br::before,
+body[data-theme="birthday"] .card--timer .card-deco--br::before { content: "🎈"; }
+
+body[data-theme="vacation"] .card--selector .card-deco--tl::before,
+body[data-theme="vacation"] .card--timer .card-deco--tl::before { content: "☀️"; }
+body[data-theme="vacation"] .card--selector .card-deco--br::before,
+body[data-theme="vacation"] .card--timer .card-deco--br::before { content: "🌴"; }
+
+body[data-theme="newyear"] .card--selector .card-deco--tl::before,
+body[data-theme="newyear"] .card--timer .card-deco--tl::before { content: "🎄"; }
+body[data-theme="newyear"] .card--selector .card-deco--br::before,
+body[data-theme="newyear"] .card--timer .card-deco--br::before { content: "🎅"; }
+
+body[data-theme="custom"] .card--selector .card-deco--tl::before,
+body[data-theme="custom"] .card--timer .card-deco--tl::before { content: "✨"; }
+body[data-theme="custom"] .card--selector .card-deco--br::before,
+body[data-theme="custom"] .card--timer .card-deco--br::before { content: "🌟"; }
+
+/* Точки-конфетти на фоне карточек */
+.card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image:
+    radial-gradient(circle, rgba(99, 102, 241, 0.15) 1px, transparent 1px),
+    radial-gradient(circle, rgba(245, 158, 11, 0.12) 1px, transparent 1px);
+  background-size: 24px 24px, 32px 32px;
+  background-position: 0 0, 12px 12px;
+}
+
+body[data-theme="birthday"] .card::after {
+  background-image:
+    radial-gradient(circle, rgba(245, 87, 108, 0.18) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 154, 158, 0.14) 1px, transparent 1px);
+}
+
+body[data-theme="vacation"] .card::after {
+  background-image:
+    radial-gradient(circle, rgba(67, 233, 123, 0.16) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(79, 172, 254, 0.14) 1px, transparent 1px);
+}
+
+body[data-theme="newyear"] .card::after {
+  background-image:
+    radial-gradient(circle, rgba(52, 232, 158, 0.16) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+}
+
+body[data-theme="custom"] .card::after {
+  background-image:
+    radial-gradient(circle, rgba(250, 112, 154, 0.16) 1.5px, transparent 1.5px),
+    radial-gradient(circle, rgba(254, 225, 64, 0.14) 1px, transparent 1px);
+}
+
+/* Мелкие иконки на кнопках событий */
+.event-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.event-btn::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  opacity: 0.25;
+}
+
+.event-btn[data-event="birthday"]::before {
+  content: "🎀";
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.event-btn[data-event="vacation"]::before {
+  content: "☀️";
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.event-btn[data-event="newyear"]::before {
+  content: "❄️";
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+.event-btn[data-event="custom"]::before {
+  content: "⭐";
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* Анимации декораций */
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(5deg); }
+}
+
+@keyframes floatMedium {
+  0%, 100% { transform: translateY(0) rotate(-3deg); }
+  50% { transform: translateY(-12px) rotate(8deg); }
+}
+
+@keyframes sway {
+  0%, 100% { transform: translateX(0) rotate(-5deg); }
+  50% { transform: translateX(12px) rotate(5deg); }
+}
+
+@keyframes bounceSoft {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
+
+@keyframes spinGlow {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.1); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% { opacity: 1; }
+  90% { opacity: 0.8; }
+  100% {
+    transform: translateY(110vh) translateX(30px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.container {
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+}
+
+/* ============================================
+   Шапка
+   ============================================ */
+.header {
+  padding: 2.5rem 0 1.5rem;
+  text-align: center;
+  animation: fadeInDown 0.8s ease;
+}
+
+.header__inner {
+  color: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.logo__icon {
+  font-size: 2.5rem;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.logo__title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header__subtitle {
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+/* ============================================
+   Карточки
+   ============================================ */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+.card {
+  position: relative;
+  overflow: visible;
+  background: var(--color-surface);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  animation: fadeInUp 0.6s ease backwards;
+}
+
+/* Контент карточки поверх точек-конфетти */
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.card--selector { animation-delay: 0.1s; }
+.card--timer { animation-delay: 0.2s; }
+.card--extra:nth-child(1) { animation-delay: 0.3s; }
+.card--extra:nth-child(2) { animation-delay: 0.4s; }
+.card--extra:nth-child(3) { animation-delay: 0.5s; }
+
+.card__title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--color-text);
+}
+
+.card__title--small {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* ============================================
+   Кнопки выбора события
+   ============================================ */
+.event-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.event-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.1rem 0.75rem;
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-solid);
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+              border-color var(--transition), background var(--transition);
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+  color: var(--color-text);
+}
+
+.event-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-primary);
+}
+
+.event-btn:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.event-btn--active {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, #eef2ff, #e0e7ff);
+  box-shadow: var(--shadow-md);
+}
+
+.event-btn__icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.event-btn__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ============================================
+   Форма
+   ============================================ */
+.event-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  animation: fadeInUp 0.4s ease;
+}
+
+.form-row--hidden {
+  display: none;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  background: #fff;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+}
+
+/* ============================================
+   Кнопки
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: transform var(--transition), box-shadow var(--transition),
+              background var(--transition);
+}
+
+.btn--primary {
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+}
+
+.btn--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+  background: linear-gradient(135deg, var(--color-primary-hover), #7c3aed);
+}
+
+.btn--primary:active {
+  transform: translateY(0);
+}
+
+.btn--ghost {
+  background: #f1f5f9;
+  color: var(--color-text);
+}
+
+.btn--ghost:hover {
+  background: #e2e8f0;
+}
+
+/* ============================================
+   Таймер
+   ============================================ */
+.event-info {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.event-info__name {
+  font-size: clamp(1.4rem, 3vw, 2rem);
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.event-info__date {
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+}
+
+/* Сообщение «событие наступило» */
+.event-passed {
+  text-align: center;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: var(--radius-md);
+  animation: celebrate 0.6s ease;
+}
+
+.event-passed--hidden {
+  display: none;
+}
+
+.event-passed__icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.event-passed__text {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #065f46;
+}
+
+/* Блок обратного отсчёта */
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.25rem;
+}
+
+.countdown--hidden {
+  display: none;
+}
+
+.countdown__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 72px;
+  padding: 1rem 0.5rem;
+  background: linear-gradient(145deg, #fff, #f8fafc);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition);
+}
+
+.countdown__item:hover {
+  transform: scale(1.05);
+}
+
+.countdown__value {
+  font-size: clamp(2rem, 6vw, 3.2rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--color-primary);
+  transition: color 0.15s ease;
+}
+
+.countdown__value--tick {
+  color: var(--color-accent);
+  transform: scale(1.08);
+}
+
+.countdown__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.35rem;
+}
+
+.countdown__separator {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  opacity: 0.4;
+  padding-bottom: 1.2rem;
+}
+
+/* ============================================
+   Дополнительные блоки
+   ============================================ */
+.extras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.extra-text {
+  font-size: 1rem;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+/* Картинка дня */
+.day-image__art {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  margin-bottom: 0.75rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition);
+  overflow: hidden;
+  position: relative;
+}
+
+.day-image__art:hover {
+  transform: scale(1.02);
+}
+
+/* Тематические фоны для картинок */
+.day-image__art--theme-0 {
+  background: linear-gradient(135deg, #ffecd2, #fcb69f);
+}
+.day-image__art--theme-1 {
+  background: linear-gradient(135deg, #a8edea, #fed6e3);
+}
+.day-image__art--theme-2 {
+  background: linear-gradient(135deg, #d299c2, #fef9d7);
+}
+.day-image__art--theme-3 {
+  background: linear-gradient(135deg, #89f7fe, #66a6ff);
+}
+.day-image__art--theme-4 {
+  background: linear-gradient(135deg, #fddb92, #d1fdff);
+}
+.day-image__art--theme-5 {
+  background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+}
+
+.day-image__caption {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  font-style: italic;
+}
+
+/* Цитата дня */
+.quote {
+  border-left: 4px solid var(--color-primary);
+  padding-left: 1rem;
+}
+
+.quote__text {
+  font-size: 1.05rem;
+  font-style: italic;
+  color: var(--color-text);
+  line-height: 1.7;
+}
+
+.quote__author {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-style: normal;
+}
+
+/* ============================================
+   Модальное окно
+   ============================================ */
+.modal {
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: 0;
+  max-width: 420px;
+  width: calc(100% - 2rem);
+  box-shadow: var(--shadow-lg);
+  animation: fadeInUp 0.3s ease;
+}
+
+.modal::backdrop {
+  background: rgba(30, 27, 75, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.modal__content {
+  padding: 1.75rem;
+}
+
+.modal__title {
+  font-size: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal__text {
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+/* ============================================
+   Подвал
+   ============================================ */
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   Анимации появления
+   ============================================ */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes celebrate {
+  0% { transform: scale(0.9); opacity: 0; }
+  50% { transform: scale(1.03); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* ============================================
+   Адаптивность для телефонов
+   ============================================ */
+@media (max-width: 600px) {
+  .header {
+    padding: 1.75rem 0 1rem;
+  }
+
+  .card {
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+  }
+
+  /* На телефоне меньше декораций, чтобы не мешали */
+  .deco {
+    font-size: 1.1rem !important;
+    opacity: 0.15 !important;
+  }
+
+  body[data-theme] .deco--birthday,
+  body[data-theme] .deco--vacation,
+  body[data-theme] .deco--newyear,
+  body[data-theme] .deco--custom {
+    opacity: 0.5 !important;
+  }
+
+  .deco-pos-3,
+  .deco-pos-5,
+  .deco-pos-10,
+  .deco-pos-12,
+  .deco-pos-17,
+  .deco-pos-21,
+  .deco-pos-23,
+  .deco-pos-24,
+  .deco-pos-25 {
+    display: none;
+  }
+
+  .card-deco {
+    font-size: 1rem;
+    opacity: 0.4;
+  }
+
+  .event-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .countdown__separator {
+    display: none;
+  }
+
+  .countdown {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .countdown__item {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .modal__actions {
+    flex-direction: column;
+  }
+
+  .modal__actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .event-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Тема страницы под выбранное событие */
+body[data-theme="birthday"] .page-bg {
+  background: linear-gradient(135deg, #f093fb, #f5576c, #ff9a9e);
+}
+
+body[data-theme="vacation"] .page-bg {
+  background: linear-gradient(135deg, #4facfe, #00f2fe, #43e97b);
+}
+
+body[data-theme="newyear"] .page-bg {
+  background: linear-gradient(135deg, #0f3443, #34e89e, #1a5f7a);
+}
+
+body[data-theme="custom"] .page-bg {
+  background: linear-gradient(135deg, #fa709a, #fee140, #f7971e);
+}
